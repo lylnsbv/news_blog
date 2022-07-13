@@ -1,0 +1,68 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}Создать страницу профиля{% endblock title %}
+{% block content %}
+    {% if user.is_authenticated %}
+        {% comment %}Блог - "Шапка"{% endcomment %}
+        <div class="hero-area height-100 bg-img background-overlay" style="background-image: url({% static 'main/img/bg2.jpg' %});">
+        </div>
+        <section class="ftco-section">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6 text-center mb-5">
+                        <h2 class="heading-section">Создать страницу профиля</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="wrap p-5">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.media }}
+                        <div class="form-group">
+                            <p>
+                                <label class="bio">Биография:</label>
+                                {{ form.bio }}
+                            </p>
+                            <p>
+                                <label class="profile_pic">Изображения профиля:</label>
+                                {{ form.profile_pic }}
+                            </p>
+                            <p>
+                                {{ form.website_url }}
+                            </p>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <p>
+                                    {{ form.facebook_url }}
+                                </p>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <p>
+                                    {{ form.instagram_url }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <p>
+                                    {{ form.twitter_url }}
+                                </p>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <p>
+                                    {{ form.pinterest_url }}
+                                </p>
+                            </div>
+                        </div>
+                        <span>{{ error }}</span><br>
+                        <div class="col text-center">
+                            <button class="btn world-btn px-5" type="submit" style="color: #ffffff; border-color: #0000ff; background-color: #0000ff;">Создать</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+{% endblock content %}

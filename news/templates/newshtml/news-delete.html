@@ -1,0 +1,37 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}Удалание статьи{% endblock title %}
+{% block content %}
+    {% if user.is_authenticated and user.id == articles.author.id %}
+        {% comment %}Блог - "Шапка"{% endcomment %}
+        <div class="hero-area height-200 bg-img background-overlay"  style="
+            {% if articles.header_image %}
+                background-image: url('{{ articles.header_image.url }}');
+            {% else %}
+                background-image: url({% static 'main/img/bg2.jpg' %});
+            {% endif %}">
+        </div>
+        <section class="ftco-section mt-10">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6 text-center mb-5">
+                        <h2 class="heading-section">Удалание статьи</h2>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="wrap pt-5 pr-5 pl-5 pb-4">
+                        <div class="col text-center">
+                            <div class="form group">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <strong>Вы уверены, что хотите удалить эту статью?</strong><br/><br/>
+                                    <button class="btn world-btn" type="submit" style="color: #ffffff; border-color: #dc3545; background-color: #dc3545;">Удалить статью</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+        </section>
+    {% endif %}
+{% endblock content %}

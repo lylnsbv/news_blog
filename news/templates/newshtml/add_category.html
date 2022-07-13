@@ -1,0 +1,14 @@
+{% extends 'main/base.html' %}
+{% block title %}Форма по добавлению категории{% endblock title %}
+{% block content %}
+    {% if user.is_authenticated %}
+        <div class="form-group">
+            <h1>Добавить новую категорию</h1>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}<br>
+                <button class="btn world-btn" type="submit" style="color: #ffffff; border-color: #0000ff; background-color: #0000ff;">Добавить категорию</button>
+            </form>
+        </div>
+    {% endif %}
+{% endblock content %}

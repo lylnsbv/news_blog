@@ -1,0 +1,79 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}Редактировать страницу профилья{% endblock title %}
+{% block content %}
+    {% if user.is_authenticated and user.id == profile.user.id %}
+        {% comment %}Блог - "Шапка"{% endcomment %}
+        <div class="hero-area height-100 bg-img background-overlay" style="background-image: url({% static 'main/img/bg2.jpg' %});">
+        </div>
+
+        <div class="regular-page-wrap section-padding-100">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6 text-center mb-5">
+                        <h1>Редактировать страницу профилья</h1>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                     <div class="form-group">
+                         <div class="page-content">
+                             <form method="POST" enctype="multipart/form-data">
+                                 {% csrf_token %}
+                                 <div class="form-group">
+                                     <p>
+                                         <label class="bio">Биография:</label>
+                                         {{ form.bio }}
+                                     </p>
+                                     <p>
+                                        {{ form.profile_pic }}
+                                     </p>
+                                 </div>
+                                 <div class="form-row">
+                                     <div class="form-group col-md-6">
+                                         <p>
+                                             <label class="website_url">Сайт:</label>
+                                             {{ form.website_url }}
+                                         </p>
+                                     </div>
+                                     <div class="form-group col-md-6">
+
+                                     </div>
+                                 </div>
+                                 <div class="form-row">
+                                     <div class="form-group col-md-6">
+                                         <p>
+                                             <label class="facebook_url">Facebook:</label>
+                                             {{ form.facebook_url }}
+                                         </p>
+                                     </div>
+                                     <div class="form-group col-md-6">
+                                         <p>
+                                             <label class="instagram_url">Instagram:</label>
+                                             {{ form.instagram_url }}
+                                         </p>
+                                     </div>
+                                 </div>
+                                 <div class="form-row">
+                                     <div class="form-group col-md-6">
+                                         <p>
+                                             <label class="twitter_url">Twitter:</label>
+                                             {{ form.twitter_url }}
+                                         </p>
+                                     </div>
+                                     <div class="form-group col-md-6">
+                                         <p>
+                                             <label class="pinterest_url">Pinterest:</label>
+                                             {{ form.pinterest_url }}
+                                         </p>
+                                     </div>
+                                 </div>
+                                 <span>{{ error }}</span><br>
+                                 <button type="submit" class="form-control btn btn-primary submit px-3">Редактировать</button>
+                             </form>
+                         </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock content %}

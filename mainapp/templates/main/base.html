@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+{% load static %}
+{% load category_tag %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <title>{% block title %}{% endblock title %}</title>
+
+    <link rel="icon" href="{% static 'main/img/favicon1.ico' %}">
+
+    <link href="{% static 'main/css/style.css' %}" rel="stylesheet">
+</head>
+
+<body>
+    <header class="header-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="navbar navbar-expand-lg">
+
+                        <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'main/img/logo.png' %}" alt="Logo"></a>
+
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#worldNav" aria-controls="worldNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+
+                        <div class="collapse navbar-collapse" id="worldNav">
+                            <ul class="navbar-nav mr-auto">
+                                {% category_list as cat_menu %}
+                                {% if cat_menu %}
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Категория</a>
+                                        <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                                            {% for cat in cat_menu %}
+                                                <a class="dropdown-item" href="{% url 'category' cat.slug %}">{{ cat.name }}</a>
+                                            {% endfor %}
+                                        </div>
+                                    </li>
+                                {% endif %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'contact' %}">Контакты</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'about' %}">О нас</a>
+                                </li>
+                            </ul>
+                            <ul class="navbar-nav navbar-right">
+                                {% if user.is_authenticated %}
+                                    {% if request.path != '/news/add_post' %}
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{% url 'add_post' %}">Добавить статью</a>
+                                        </li>
+                                    {% endif %}
+                                    <li class="nav-item dropdown">
+                                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-toggle="dropdown" aria-expanded="false">
+                                        {{ user|title }}
+                                      </a>
+                                      <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                        <li><a class="dropdown-item" href="{% url 'edit_profile' %}">Настройка профиля</a></li>
+                                        {% if user.profile.id %}
+                                          <li><a class="dropdown-item" href="{% url 'edit_profile_page' user.profile.id %}">Редактировать профиль</a></li>
+                                          <li><a class="dropdown-item" href="{% url 'show_profile_page' user.profile.id %}">Прасмотр профиля</a></li>
+                                        {% else %}
+                                          <li><a class="dropdown-item" href="{% url 'create_profile_page' %}">Создать страницу профиля</a></li>
+                                        {% endif %}
+                                          <li><a class="dropdown-item" href="{% url 'logout' %}">Выход</a></li>
+                                      </ul>
+                                    </li>
+                                {% else %}
+                                    {% if request.path != '/members/login/' %}
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{% url 'login' %}">Войти</a>
+                                        </li>
+                                        {% if request.path != '/members/register/' %}
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="{% url 'register' %}">Регистрация</a>
+                                            </li>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            </ul>
+
+                            <div id="search-wrapper">
+                                <form action="#">
+                                    <input type="text" id="search" placeholder="Искать...">
+                                    <div id="close-icon"></div>
+                                    <input class="d-none" type="submit" value="">
+                                </form>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    {% block content %}{% endblock content %}
+
+    <footer class="footer-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-4">
+                    <div class="footer-single-widget">
+                        <a href="{% url 'home' %}"><img src="{% static 'main/img/logo.png' %}" alt=""></a>
+                        <div class="copywrite-text mt-30">
+                            <p>
+                               Авторские права &copy;<script>
+                                    document.write(new Date().getFullYear());
+                                </script> Все права защищены
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="footer-single-widget">
+                        <ul class="footer-menu d-flex justify-content-between">
+                            <li><a href="{% url 'home' %}">Главная</a></li>
+                            <li><a href="{% url 'contact' %}">Контакты</a></li>
+                            <li><a href="{% url 'about' %}">О нас</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="footer-single-widget">
+                        <h5>Подписаться</h5>
+                        <form action="#" method="post">
+                            <input type="email" name="email" id="email" placeholder="Введите вашу почту">
+                            <button type="button"><i class="fa fa-arrow-right"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'main/js/jquery/jquery-2.2.4.min.js' %}"></script>
+    <script src="{% static 'main/js/popper.min.js' %}"></script>
+    <script src="{% static 'main/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'main/js/plugins.js' %}"></script>
+    <script src="{% static 'main/js/active.js' %}"></script>
+
+</body>
+
+</html>

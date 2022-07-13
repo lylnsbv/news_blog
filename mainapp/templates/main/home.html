@@ -1,0 +1,520 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}Блог - Посты и Новости {% endblock title %}
+{% block content %}
+    <div class="hero-area">
+
+        <div class="hero-slides owl-carousel">
+
+            <div class="single-hero-slide bg-img background-overlay" style="background-image: url({% static 'main/img/bg2.jpg' %});"></div>
+
+            <div class="single-hero-slide bg-img background-overlay" style="background-image: url({% static 'main/img/bg1.jpg' %});"></div>
+        </div>
+        <div class="hero-post-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="hero-post-slide">
+                            {% if news %}
+                                {% for new in news %}
+                                    <div class="single-slide d-flex align-items-center">
+                                        <div class="post-number">
+                                            <p>{{ forloop.counter }}</p>
+                                        </div>
+                                        <div class="post-title">
+                                            <a href="{% url 'news-detail' new.id %}">{{ new.title }}</a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main-content-wrapper section-padding-100">
+        <div class="container">
+            <div class="row justify-content-center">
+
+                <div class="col-12 col-lg-8">
+                    <div class="post-content-area mb-50">
+
+                        {% comment %}Блог - "Не Пропустите"{% endcomment %}
+                        <div class="world-catagory-area">
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="title">Не Пропустите</li>
+                                {% if cat_menu %}
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="tab1" data-toggle="tab" href="#world-tab-1" role="tab" aria-controls="world-tab-1" aria-selected="true">Все</a>
+                                    </li>
+                                    {% for catt in cat_menu|slice:":5" %}
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="tab{{ catt.slug }}" data-toggle="tab" href="#world-tab-{{ catt.slug }}" role="tab" aria-controls="world-tab-{{ catt.slug }}" aria-selected="false">{{ catt.name }}</a>
+                                        </li>
+                                    {% endfor %}
+                                    {% if cat_menu|length > 5 %}
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Еще</a>
+                                            <div class="dropdown-menu">
+                                                {% for cat in cat_menu|slice:"5:" %}
+                                                    <a class="nav-link" id="tab{{ cat.slug }}" data-toggle="tab" href="#world-tab-{{ cat.slug }}" role="tab" aria-controls="world-tab-{{ cat.slug }}" aria-selected="false">{{ cat.name }}</a>
+                                                {% endfor %}
+                                            </div>
+                                        </li>
+                                    {% endif %}
+                                {% endif %}
+                            </ul>
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="world-tab-1" role="tabpanel" aria-labelledby="tab1">
+                                    <div class="row">
+                                        <div class="col-12 col-md-6">
+                                            <div class="world-catagory-slider owl-carousel wow fadeInUpBig" data-wow-delay="0.1s">
+                                                {% for new in news %}
+                                                    <div class="single-blog-post">
+                                                        <div class="post-thumbnail">
+                                                             {% if new.header_image %}
+                                                                <img src="{{ new.header_image.url }}" style="height:200px" alt="">
+                                                             {% else %}
+                                                                <br/><br/>
+                                                             {% endif %}
+                                                            <div class="post-cta"><a href="{% url 'category' new.category.slug|slugify %}">{{ new.category.name }}</a></div>
+                                                        </div>
+
+                                                        <div class="post-content">
+                                                            <a href="{% url 'news-detail' new.id %}" class="headline">
+                                                                <h5>{{ new.title|truncatechars:50 }}</h5>
+                                                            </a>
+                                                            <p>{{ new.full_text|safe|truncatechars:140 }}</p>
+                                                            <div class="post-meta">
+                                                                <p><a href="{% if new.author.profile.id %}{% url 'show_profile_page' new.author.profile.id %}{% else %}#{% endif %}" class="post-author">{{ new.author|title }}</a>, <a href="#" class="post-date">{{ new.post_date }}</a></p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            {% for new in news|slice:":4" %}
+                                                <div class="single-blog-post post-style-2 d-flex align-items-center wow fadeInUpBig" data-wow-delay="{% cycle 0.2 0.3 0.4 0.5 %}s">
+                                                    <div class="post-thumbnail">
+                                                        {% if new.header_image %}
+                                                            <img src="{{ new.header_image.url }}" style="height:100px" alt="">
+                                                        {% else %}
+                                                            <br/><br/>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="post-content">
+                                                        <a href="{% url 'news-detail' new.id %}" class="headline">
+                                                            <h5>{{ new.title|truncatechars:45 }}</h5>
+                                                        </a>
+
+                                                        <div class="post-meta">
+                                                            <p><a href="{% if new.author.profile.id %}{% url 'show_profile_page' new.author.profile.id %}{% else %}#{% endif %}" class="post-author">{{ new.author|title }}</a>, <a href="#" class="post-date">{{ new.post_date }}</a></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% for cat3 in cat_menu %}
+                                    <div class="tab-pane fade" id="world-tab-{{ cat3.slug }}" role="tabpanel" aria-labelledby="tab{{ forloop.counter|add:'1' }}">
+                                        <div class="row">
+                                            {% for new in cat_newest %}
+                                                {% if new.category_id == cat3.id %}
+                                                    <div class="col-12 col-md-6">
+                                                        <div class="single-blog-post">
+                                                            <div class="post-thumbnail">
+                                                                {% if new.header_image %}
+                                                                        <img src="{{ new.header_image.url }}" style="height:200px" alt="">
+                                                                {% else %}
+                                                                    <br/><br/>
+                                                                {% endif %}
+
+                                                                <div class="post-cta"><a href="{% url 'category' cat3.slug|slugify %}">{{ cat3.name }}</a></div>
+                                                            </div>
+
+                                                            <div class="post-content">
+                                                                <a href="{% url 'news-detail' new.id %}" class="headline">
+                                                                    <h5>{{ new.title|truncatechars:50 }}</h5>
+                                                                </a>
+                                                                <p>{{ new.full_text|safe|truncatechars:75 }}</p>
+
+                                                                <div class="post-meta">
+                                                                    <p><a href="{% if new.author.profile.id %}{% url 'show_profile_page' new.author.profile.id %}{% else %}#{% endif %}" class="post-author">{{ new.author|title }}</a>, <a href="#" class="post-date">{{ new.post_date }}</a></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                            <div class="col-12 col-md-6">
+                                                {% for new in news|slice:":33" %}
+                                                    {% if new.category_id == cat3.id %}
+                                                        <div class="single-blog-post post-style-2 d-flex align-items-center">
+                                                            <div class="post-thumbnail">
+                                                                {% if new.header_image %}
+                                                                    <img src="{{ new.header_image.url }}" style="height:100px" alt="">
+                                                                {% else %}
+                                                                    <br/><br/>
+                                                                {% endif %}
+                                                            </div>
+
+                                                            <div class="post-content">
+                                                                <a href="{% url 'news-detail' new.id %}" class="headline">
+                                                                    <h5>{{ new.title|truncatechars:50 }}</h5>
+                                                                </a>
+                                                                <div class="post-meta">
+                                                                    <p><a href="{% if new.author.profile.id %}{% url 'show_profile_page' new.author.profile.id %}{% else %}#{% endif %}" class="post-author">{{ new.author|title }}</a>, <a href="#" class="post-date">{{ new.post_date }}</a></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        {% comment %}Блог - "Что В Тренде"{% endcomment %}
+                        <div class="world-catagory-area mt-50">
+                            <ul class="nav nav-tabs" id="myTab2" role="tablist">
+                                <li class="title">Что В Тренде</li>
+                                {% if cat_menu %}
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="tab10" data-toggle="tab" href="#world-tab-10" role="tab" aria-controls="world-tab-10" aria-selected="true">Все</a>
+                                    </li>
+                                    {% for cat4 in cat_menu|slice:":5" %}
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="tab{{ forloop.counter|add:'10' }}" data-toggle="tab" href="#world-tab-{{ forloop.counter|add:'10' }}" role="tab" aria-controls="world-tab-{{ forloop.counter|add:'10' }}" aria-selected="false">{{ cat4.name }}</a>
+                                        </li>
+                                    {% endfor %}
+                                    {% if cat_menu|length > 5 %}
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Еще</a>
+                                            <div class="dropdown-menu">
+                                                {% for cat5 in cat_menu|slice:"5:" %}
+                                                    <a class="nav-link" id="tab{{ forloop.counter|add:'15' }}" data-toggle="tab" href="#world-tab-{{ forloop.counter|add:'15' }}" role="tab" aria-controls="world-tab-{{ forloop.counter|add:'15' }}" aria-selected="false">{{ cat5.name }}</a>
+                                                {% endfor %}
+                                            </div>
+                                        </li>
+                                    {% endif %}
+                                {% endif %}
+                            </ul>
+                            <div class="tab-content" id="myTabContent2">
+                                <div class="tab-pane fade show active" id="world-tab-10" role="tabpanel" aria-labelledby="tab10">
+                                    <div class="row">
+                                        {% for new in top_comments|slice:":2" %}
+                                            <div class="col-12 col-md-6">
+
+                                                <div class="single-blog-post wow fadeInUpBig" data-wow-delay="0.2s">
+
+                                                    <div class="post-thumbnail">
+
+                                                        {% if new.header_image %}
+                                                            <img src="{{ new.header_image.url }}" style="height: 200px;" alt="">
+                                                        {% else %}
+                                                            <br/><br/>
+                                                        {% endif %}
+
+                                                        <div class="post-cta"><a href="{% url 'category' new.category.slug %}">{{ new.category.name }}</a></div>
+                                                    </div>
+
+                                                    <div class="post-content">
+                                                        <a href="{% url 'news-detail' new.id %}" class="headline">
+                                                            <h5>{{ new.title|title|truncatechars:49 }}</h5>
+                                                        </a>
+                                                        <p>{{ new.full_text|safe|truncatechars:140 }}</p>
+
+                                                        <div class="post-meta">
+                                                            <p><a href="{% if new.author.profile.id %}{% url 'show_profile_page' new.author.profile.id %}{% else %}#{% endif %}" class="post-author">{{ new.author|title }}</a>, <a href="#" class="post-date">{{ new.post_date }}</a></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                        <div class="col-12">
+                                            <div class="world-catagory-slider2 owl-carousel wow fadeInUpBig" data-wow-delay="0.4s">
+
+                                                <div class="single-cata-slide">
+                                                    <div class="row">
+                                                        {% for new in top_comments %}
+                                                            <div class="col-12 col-md-6">
+
+                                                                <div class="single-blog-post post-style-2 d-flex align-items-center mb-1">
+                                                                    <div class="post-thumbnail">
+
+                                                                        {% if new.header_image %}
+                                                                            <img src="{{ new.header_image.url }}" style="height:100px;" alt="">
+                                                                        {% else %}
+                                                                            <br/><br/>
+                                                                        {% endif %}
+                                                                    </div>
+                                                                    <div class="post-content">
+                                                                        <a href="{% url 'news-detail' new.id %}" class="headline">
+                                                                            <h5>{{ new.title|title|truncatechars:45 }}</h5>
+                                                                        </a>
+
+                                                                        <div class="post-meta">
+                                                                            <p><a href="{% if new.author.profile.id %}{% url 'show_profile_page' new.author.profile.id %}{% else %}#{% endif %}" class="post-author">{{ new.author|title }}</a>, <a href="#" class="post-date">{{ new.post_date }}</a></p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+
+                                                <div class="single-cata-slide">
+                                                    <div class="row">
+                                                        {% for cat in cat_menu %}
+                                                            {% if forloop.parentloop.counter > 4 %}
+                                                                forloop.parentloop.counter = 1
+                                                            {% endif %}
+                                                            {% for new in top_comments %}
+                                                                {% if new.category_id == cat.id and forloop.parentloop.counter <= 4 %}
+
+                                                                    <div class="col-12 col-md-6">
+
+                                                                        <div class="single-blog-post post-style-2 d-flex align-items-center mb-1">
+                                                                            <div class="post-thumbnail">
+
+                                                                                {% if new.header_image %}
+                                                                                    <img src="{{ new.header_image.url }}" style="height:100px;" alt="">
+                                                                                {% else %}
+                                                                                    <br/><br/>
+                                                                                {% endif %}
+                                                                            </div>
+
+                                                                            <div class="post-content">
+                                                                                <a href="{% url 'news-detail' new.id %}" class="headline">
+                                                                                    <h5>{{ new.title|title|truncatechars:45 }}</h5>
+                                                                                </a>
+
+                                                                                <div class="post-meta">
+                                                                                    <p><a href="{% if new.author.profile.id %}{% url 'show_profile_page' new.author.profile.id %}{% else %}#{% endif %}" class="post-author">{{ new.author|title }}</a>, <a href="#" class="post-date">{{ new.post_date }}</a></p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        {% endfor %}
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% for cat in cat_menu %}
+                                    <div class="tab-pane fade" id="world-tab-{{ forloop.counter|add:'10' }}" role="tabpanel" aria-labelledby="tabtab{{ forloop.counter|add:'10' }}">
+                                        <div class="row">
+                                            {% for new in top_comments %}
+                                                {% if new.category_id == cat.id %}
+                                                    <div class="col-12 col-md-6">
+
+                                                        <div class="single-blog-post">
+
+                                                            <div class="post-thumbnail">
+                                                                {% if new.header_image %}
+                                                                    <img src="{{ new.header_image.url }}" style="height: 200px;" alt="">
+                                                                {% else %}
+                                                                    <br/><br/>
+                                                                {% endif %}
+                                                                <div class="post-cta"><a href="{% url 'category' new.category.slug %}">{{ new.category.name }}</a></div>
+
+                                                            </div>
+
+                                                            <div class="post-content">
+                                                                <a href="{% url 'news-detail' new.id %}" class="headline">
+                                                                    <h5>{{ new.title|truncatechars:45 }}</h5>
+                                                                </a>
+                                                                <p>{{ new.full_text|safe|truncatechars:140 }}</p>
+
+                                                                <div class="post-meta">
+                                                                    <p><a href="{% if new.author.profile.id %}{% url 'show_profile_page' new.author.profile.id %}{% else %}#{% endif %}" class="post-author">{{ new.author|title }}</a>, <a href="#" class="post-date">{{ new.post_date }}</a></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% for new in top_comments %}
+                                                {% if new.category_id == cat.id and forloop.parentloop.counter == 3 and forloop.parentloop.counter <= 6 %}
+                                                    <div class="col-12 col-md-6">
+
+                                                        <div class="single-blog-post post-style-2 d-flex align-items-center mb-1">
+
+                                                            <div class="post-thumbnail">
+                                                                {% if new.header_image %}
+                                                                    <img src="{{ new.header_image.url }}" style="height: 100px;" alt="">
+                                                                {% else %}
+                                                                    <br/><br/>
+                                                                {% endif %}
+                                                            </div>
+
+                                                            <div class="post-content">
+                                                                 <a href="{% url 'news-detail' new.id %}" class="headline">
+                                                                    <h5>{{ new.title }}</h5>
+                                                                </a>
+
+                                                                <div class="post-meta">
+                                                                    <p><a href="{% if new.author.profile.id %}{% url 'show_profile_page' new.author.profile.id %}{% else %}#{% endif %}" class="post-author">{{ new.author|title }}</a>, <a href="#" class="post-date">{{ new.post_date }}</a></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                                {% if forloop.parentloop.counter > 6 %}
+                                                    forloop.parentloop.counter = 1
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% include "newshtml/reusable.html" %}
+            </div>
+
+            {% comment %}Блог - "Сегодняшний Выбор2-4"{% endcomment %}
+            <div class="row justify-content-center">
+                {% for new in today_pick|slice:"1:" %}
+
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="single-blog-post post-style-3 mt-50 wow fadeInUpBig" data-wow-delay="{% cycle 0.2 0.4 0.6 %}s">
+
+                            <div class="post-thumbnail">
+                                {% if new.header_image %}
+                                    <img src="{{ new.header_image.url }}" alt="">
+                                {% else %}
+                                    <br/><br/>
+                                {% endif %}
+
+                                <div class="post-content d-flex align-items-center justify-content-between">
+
+                                    <div class="post-tag"><a href="{% url 'category' new.category.slug %}">{{ new.category.name }}</a></div>
+
+                                    <a href="{% url 'news-detail' new.id %}" class="headline">
+                                        <h5>{{ new.title }}</h5>
+                                    </a>
+
+                                    <div class="post-meta">
+                                        <p><a href="{% if new.author.profile.id %}{% url 'show_profile_page' new.author.profile.id %}{% else %}#{% endif %}" class="post-author">{{ new.author }}</a>, <a href="#" class="post-date">{{ new.post_date }}</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            </div>
+
+            <div class="world-latest-articles">
+                <div class="row">
+
+                    {% comment %}Блог - "Последние Статьи"{% endcomment %}
+                    <div class="col-12 col-lg-8">
+                        <div class="title">
+                            <h5>Последние Статьи</h5>
+                        </div>
+                        {% for new in news|slice:":4" %}
+                            <div class="single-blog-post post-style-4 d-flex align-items-center wow fadeInUpBig" data-wow-delay="{% cycle 0.2 0.3 0.4 0.5 %}s">
+
+                                <div class="post-thumbnail">
+                                    {% if new.header_image %}
+                                        <img src="{{ new.header_image.url }}" style="height:200px" alt="">
+                                    {% else %}
+                                        <br/><br/>
+                                    {% endif %}
+                                </div>
+                                <div class="post-content">
+                                    <a href="{% url 'news-detail' new.id %}" class="headline">
+                                        <h5>{{ new.title }}</h5>
+                                    </a>
+                                    <p>{{ new.full_text|safe|truncatechars:140 }}</p>
+
+                                    <div class="post-meta">
+                                        <p><a href="{% if new.author.profile.id %}{% url 'show_profile_page' new.author.profile.id %}{% else %}#{% endif %}" class="post-author">{{ new.author|title }}</a>, <a href="#" class="post-date">{{ new.post_date }}</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    {% comment %}Блог - "Самые Популярные Видео"{% endcomment %}
+                    <div class="col-12 col-lg-4">
+                        <div class="title">
+                            <h5>Самые Популярные Видео</h5>
+                        </div>
+
+                        <div class="single-blog-post wow fadeInUpBig" data-wow-delay="0.2s">
+
+                            <div class="post-thumbnail">
+                                <img src="{% static 'main/img/b7.jpg' %}" alt="">
+
+                                <div class="post-cta"><a href="#">Путешествие</a></div>
+
+                                <a href="https://www.youtube.com/" class="video-btn"><i class="fa fa-play"></i></a>
+                            </div>
+
+                            <div class="post-content">
+                                <a href="#" class="headline">
+                                    <h5>Как Бурный Ум Ван Гога Изобразил Одну Из Самых Сложных Концепций В Физике?</h5>
+                                </a>
+                                <p>Как Бурный Ум Ван Гога Изобразил Одну Из Самых Сложных Концепций В ...</p>
+
+                                <div class="post-meta">
+                                    <p><a href="#" class="post-author">Катя</a>, <a href="#" class="post-date">29 мая 2021 г. 15:00</a></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="single-blog-post wow fadeInUpBig" data-wow-delay="0.4s">
+
+                            <div class="post-thumbnail">
+                                <img src="{% static 'main/img/b8.jpg' %}" alt="">
+
+                                <div class="post-cta"><a href="#">Путешествие</a></div>
+
+                                <a href="https://www.youtube.com/" class="video-btn"><i class="fa fa-play"></i></a>
+                            </div>
+
+                            <div class="post-content">
+                                <a href="#" class="headline">
+                                    <h5>Как Бурный Ум Ван Гога Изобразил Одну Из Самых Сложных Концепций В Физике?</h5>
+                                </a>
+                                <p>Как Бурный Ум Ван Гога Изобразил Одну Из Самых Сложных Концепций В ...?</p>
+
+                                <div class="post-meta">
+                                    <p><a href="#" class="post-author">Катя</a>, <a href="#" class="post-date">28 мая 2021 г. 15:36</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% comment %}Кнопка"Еще Больше"{% endcomment %}
+            <div class="row">
+                <div class="col-12">
+                    <div class="load-more-btn mt-50 text-center">
+                        <a href="#" class="btn world-btn">Еще Больше</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock content %}

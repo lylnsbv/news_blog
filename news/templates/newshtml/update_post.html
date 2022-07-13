@@ -1,0 +1,40 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}Изменения статьи{% endblock title %}
+{% block content %}
+    {% if user.is_authenticated and user.id == articles.author.id %}
+        {% comment %}Блог - "Шапка"{% endcomment %}
+        <div class="hero-area height-200 bg-img background-overlay"  style="
+            {% if articles.header_image %}
+                background-image: url('{{ articles.header_image.url }}');
+            {% else %}
+                background-image: url({% static 'main/img/bg2.jpg' %});
+            {% endif %}">
+        </div>
+        <section class="ftco-section">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6 text-center mb-5">
+                        <h2 class="heading-section">Изменить статью</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="wrap p-5">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.media }}
+                        {{ form.title }}<br>
+                        {{ form.anons }}<br>
+                        {{ form.category }}<br>
+                        {{ form.full_text }}<br>
+                        {{ form.post_date }}<br>
+                        {{ form.header_image }}<br>
+                        <span>{{ error }}</span><br>
+                        <button class="btn world-btn" type="submit" style="color: #ffffff; border-color: #0000ff; background-color: #0000ff;">Изменить</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+{% endblock content %}
