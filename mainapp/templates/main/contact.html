@@ -1,0 +1,60 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock title %}
+{% block content %}
+    <div class="hero-area height-400 bg-img background-overlay" style="background-image: url({% static 'main/img/bg4.jpg' %});"></div>
+
+    <section class="contact-area section-padding-100">
+        <div class="container">
+            <div class="row justify-content-center">
+
+                <div class="col-12 col-md-10 col-lg-8">
+                    {% if sent %}
+                        <center>
+                            <h2>Спасибо {{ sent }} !</h2>
+                            <h5> Ваше сообщение было отправлено.</h5>
+                        </center>
+                    {% else %}
+                        <div class="contact-form">
+                            <h5>Связаться</h5>
+
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <div class="group">
+                                            <input type="text" name="name" id="name" required>
+                                            <span class="highlight"></span>
+                                            <span class="bar"></span>
+                                            <label>Введите ваше имя</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="group">
+                                            <input type="email" name="email" id="email" required>
+                                            <span class="highlight"></span>
+                                            <span class="bar"></span>
+                                            <label>Введите адрес электронной почты</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="group">
+                                            <textarea name="message" id="message" required></textarea>
+                                            <span class="highlight"></span>
+                                            <span class="bar"></span>
+                                            <label>Введите ваше сообщение</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" class="btn world-btn">Отправить</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock content %}

@@ -1,0 +1,54 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}Профиль пользователя{% endblock title %}
+{% block content %}
+    {% comment %}Блог - "Шапка"{% endcomment %}
+    <div class="hero-area height-100 bg-img background-overlay" style="background-image: url({% static 'main/img/bg2.jpg' %});">
+    </div>
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 text-center mb-5">
+                    <h2 class="heading-section">Профиль пользователя</h2>
+                </div>
+            </div>
+            <div class="single-blog-content mb-100">
+                <div class="post-content card mb-3">
+                    <div class="row g-0">
+                        <div class="col-md-2 text-center">
+                            {% if page_user.profile_pic %}
+                                <img src="{{ page_user.profile_pic.url }}">
+                            {% else %}
+                                <img src="{% static 'main/img/black-male-user-symbol.png' %}">
+                            {% endif %}
+                        </div>
+                        <div class="col-md-10">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ page_user.user|title }}</h5>
+                                <p class="small text-muted">
+                                    {% if page_user.website_url %}
+                                        <a href="{{ page_user.website_url }}"><u>Сайт</u></a> |
+                                    {% endif %}
+                                    {% if page_user.facebook_url %}
+                                        <a href="{{ page_user.facebook_url }}"><u>Facebook</u></a> |
+                                    {% endif %}
+                                    {% if page_user.twitter_url %}
+                                        <a href="{{ page_user.twitter_url }}"><u>Twitter</u></a> |
+                                    {% endif %}
+                                    {% if page_user.instagram_url %}
+                                        <a href="{{ page_user.instagram_url }}"><u>Instagram</u></a> |
+                                    {% endif %}
+                                    {% if page_user.pinterest_url %}
+                                        <a href="{{ page_user.pinterest_url }}"><u>Pinterest</u></a>
+                                    {% endif %}
+                                </p>
+                                <p class="card-text">{{ page_user.bio }}</p>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock content %}

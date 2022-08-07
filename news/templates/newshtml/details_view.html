@@ -1,0 +1,172 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}{{ article.title }}{% endblock title %}
+{% block content %}
+     {% comment %}Блог - "Шапка"{% endcomment %}
+    <div class="hero-area height-600 bg-img background-overlay" style="
+        {% if article.header_image %}
+            background-image: url('{{ article.header_image.url }}');
+        {% else %}
+            background-image: url({% static 'main/img/bg2.jpg' %});
+        {% endif %}">
+
+        <div class="container h-100">
+            <div class="row h-100 align-items-center justify-content-center">
+                <div class="col-12 col-md-8 col-lg-6">
+                    <div class="single-blog-title text-center">
+
+                        <div class="post-cta"><a href="{% url 'category' article.category.slug|slugify %}">{{ article.category.name }}</a></div>
+                        <h3>{{ article.title|title }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content-wrapper section-padding-100">
+        <div class="container">
+            <div class="row justify-content-center">
+
+                <div class="col-12 col-lg-8">
+
+                    <div class="single-blog-content mb-100">
+
+                        <div class="post-meta">
+                            <p><a href="{% if article.author.profile.id %}{% url 'show_profile_page' article.author.profile.id %}{% else %}#{% endif %}" class="post-author text-dark"><strong>{{ article.author|title }}, </strong></a><a href="#" class="post-date text-dark"><strong>{{ article.post_date }}</strong></a></p>
+                        </div>
+
+                        <div class="post-content">
+                            <h6>{{ article.full_text|safe }}</h6>
+                            <ul class="post-tags">
+                                <li><a href="#">{{ article.anons }}</a></li>
+                            </ul>
+
+                            <div class="post-meta second-part">
+                                <p><a href="#" class="post-author">{{ article.author|title }}</a>, <a href="#" class="post-date">{{ article.post_date }}</a></p>
+                            </div>
+                            <br/><br/>
+                            <div class="card mb-3">
+                                  <div class="row g-0">
+                                        <div class="col-12 col-md-8 col-lg-4">
+                                            <div class="text-center p-3">
+                                                {% if article.author.profile.profile_pic %}
+                                                    <img src="{{ article.author.profile.profile_pic.url }}">
+                                                {% else %}
+                                                    <img src="{% static 'main/img/black-male-user-symbol.png' %}">
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-8">
+                                              <div class="card-body p-1">
+                                                    <h5 class="card-title">{{ article.author|title }}</h5>
+                                                    <p class="small text-muted">
+                                                        {%  if article.author.profile.id %}
+                                                            <a href="{% url 'show_profile_page' article.author.profile.id %}">Страница профиля</a> |
+                                                        {% endif %}
+                                                        {% if article.author.profile.website_url %}
+                                                            <a href="{{ article.author.profile.website_url }}">Сайт</a> |
+                                                        {% endif %}
+                                                        {% if article.author.profile.facebook_url %}
+                                                            <a href="{{ article.author.profile.facebook_url }}">Facebook</a> |
+                                                        {% endif %}
+                                                        {% if article.author.profile.twitter_url %}
+                                                            <a href="{{ article.author.profile.twitter_url }}">Twitter</a> |
+                                                        {% endif %}
+                                                        {% if article.author.profile.instagram_url %}
+                                                            <a href="{{ article.author.profile.instagram_url }}">Instagram</a> |
+                                                        {% endif %}
+                                                        {% if article.author.profile.pinterest_url %}
+                                                            <a href="{{ article.author.profile.pinterest_url }}">Pinterest</a>
+                                                        {% endif %}
+                                                    </p>
+                                                    <p class="card-text">{{ article.author.profile.bio }}</p>
+                                              </div>
+                                        </div>
+                                  </div>
+                            </div>
+                        </div>
+                        <br/>
+                        <form action="{% url 'like_post' article.id %}" method="POST">
+                            {% csrf_token %}
+                            {% if user.is_authenticated %}
+                                {% if user.id != article.author.id %}
+                                    {% if liked %}
+                                        <button type="submit" name="article_id" value="{{ article.id }}" class="btn btn-labeled btn-danger">
+                                            <span class="btn-label"><i class="fa fa-thumbs-down"></i></span>
+                                        </button> -
+                                    {% else %}
+                                        <button type="submit" name="article_id" value="{{ article.id }}" class="btn btn-labeled btn-primary">
+                                            <span class="btn-label"><i class="fa fa-thumbs-up"></i></span>
+                                        </button> -
+                                    {% endif %}
+                                {% endif %}
+                            {% else %}
+                                <p><a href="{% url 'login' %}"><strong><u class="text-dark">Войти</u></strong></a>, чтобы поставить лайк</p>
+                            {% endif %}
+                            {{ total_likes }} лайк
+                        </form><br/>
+                        {% if user.is_authenticated and user.id == article.author.id %}
+                            <div class="btn-group btn-group-sm" role="group">
+                                <a href="{% url 'news-delete' article.id %}" class="btn btn-outline-secondary">Удалить</a>
+                                <a href="{% url 'news-update' article.id %}" class="btn btn-primary">Редактировать</a>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    {% if user.is_authenticated %}
+                        {% if user.id != article.author.id %}
+                            <div class="post-a-comment-area mt-70">
+                                <h5>Добавить комментарий</h5>
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="group">
+                                                {{ comment_form.body }}
+                                                <span class="highlight"></span>
+                                                <span class="bar"></span>
+                                                <label>Введите свой комментарий</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <button type="submit" class="btn world-btn">Добавить</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        {% else %}
+                            <p>У вас еще нет коментарии</p>
+                        {% endif %}
+                    {% else %}
+                        <div class="post-meta">
+                            <p><a href="{% url 'login' %}" class="post-author" ><strong><u class="text-dark">Войти</u></strong></a>, чтобы оставить коментарии</p>
+                        </div>
+                    {% endif %}
+                    <div class="comment_area clearfix mt-70">
+
+                        {% if article.comments.all %}
+                            <h3>Коментарии</h3>
+                            <ol>
+                                {% for comment in article.comments.all reversed %}
+                                    <li class="single_comment_area">
+
+                                        <div class="comment-content">
+
+                                            <div class="comment-meta d-flex align-items-center justify-content-between">
+                                                <p><a href="#" class="post-author">{{ comment.name|title }}</a>, <a href="#" class="post-date">{{ comment.date_added }}</a></p>
+                                            </div>
+                                            <p>{{ comment.body }}</p>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ol>
+                        {% endif %}
+                    </div><br/>
+                </div>
+
+                {% include "newshtml/reusable.html" %}
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

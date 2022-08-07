@@ -1,0 +1,56 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}Настройка профиля{% endblock title %}
+{% block content %}
+    {% comment %}Блог - "Шапка"{% endcomment %}
+    <div class="hero-area height-100 bg-img background-overlay" style="background-image: url({% static 'main/img/bg2.jpg' %});">
+    </div>
+    {% if user.is_authenticated %}
+        <section class="ftco-section">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6 text-center mb-5">
+                        <h2 class="heading-section">Настройка профиля</h2>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="wrap pt-5 pr-5 pl-5 pb-4">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <p>
+                                    <label class="username">Логин:</label>
+                                    {{ form.username }}
+                                </p>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <p>
+                                        <label class="first_name">Имя:</label>
+                                        {{ form.first_name }}
+                                    </p>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <p>
+                                        <label class="last_name">Фамилия:</label>
+                                        {{ form.last_name }}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <p>
+                                    <label class="email">Почта:</label>
+                                    {{ form.email }}
+                                </p>
+                            </div>
+                            <a href="../password/"><u>Изменить пароль...</u></a><br/><br/>
+                            <div class="col text-center">
+                                <button class="btn world-btn" type="submit" style="color: #ffffff; border-color: #0000ff; background-color: #0000ff;">Изменить</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+{% endblock content %}

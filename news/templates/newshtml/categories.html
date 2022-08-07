@@ -1,0 +1,65 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}{{ category.name }}{% endblock title %}
+{% block content %}
+
+    <div class="hero-area height-400 bg-img background-overlay" style="background-image:url({% static 'main/img/festival.png' %})"></div>
+
+    <div class="main-content-wrapper section-padding-100">
+        <div class="container">
+            <div class="row justify-content-center">
+
+                <div class="col-12 col-lg-8">
+                    <div class="post-content-area mb-100">
+                        <div class="world-catagory-area">
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="title">{{ category.name }}</li>
+                            </ul>
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="world-tab-1" role="tabpanel" aria-labelledby="tab1">
+                                    {% if category_posts %}
+                                        {% for post in category_posts %}
+                                            <div class="single-blog-post post-style-4 d-flex align-items-center">
+
+                                                <div class="post-thumbnail">
+                                                    {% if post.header_image %}
+                                                        <img src="{{ post.header_image.url }}" style="height:200px" alt="">
+                                                    {% else %}
+                                                        <br/><br/>
+                                                    {% endif %}
+                                                </div>
+
+                                                <div class="post-content">
+                                                    <a href="{% url 'news-detail' post.id %}" class="headline">
+                                                        <h5>{{ post.title|title }}</h5>
+                                                    </a>
+                                                    <p>{{ post.full_text|safe|truncatechars:140 }}</p>
+
+                                                    <div class="post-meta">
+                                                        <p><a href="{% if post.author.profile.id %}{% url 'show_profile_page' post.author.profile.id %}{% else %}#{% endif %}" class="post-author">{{ post.author }}</a>, <a href="#" class="post-date">{{ post.post_date }}</a></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% include "newshtml/reusable.html" %}
+            </div>
+
+            {% comment %}Кнопка"Еще Больше"{% endcomment %}
+            <div class="row">
+                <div class="col-12">
+                    <div class="load-more-btn mt-50 text-center">
+                        <a href="#" class="btn world-btn">Еще Больше</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

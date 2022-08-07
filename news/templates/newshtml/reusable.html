@@ -1,0 +1,80 @@
+<div class="col-12 col-md-8 col-lg-4">
+    <div class="post-sidebar-area wow fadeInUpBig" data-wow-delay="0.2s">
+
+        {% comment %}Блог - "О Блоге"{% endcomment %}
+        <div class="sidebar-widget-area">
+            <h5 class="title">О Блоге</h5>
+            <div class="widget-content">
+                <p>Блог (англ. blog, от web log — интернет-журнал событий, интернет-дневник, онлайн-дневник) — веб-сайт, основное содержимое которого — регулярно добавляемые пользователем записи, содержащие текст, изображения или мультимедиа.
+                    Для блогов характерна возможность публикации отзывов (комментариев) посетителями; она делает блоги средой сетевого общения, имеющей ряд преимуществ перед электронной почтой, группами новостей и чатами.</p>
+            </div>
+        </div>
+
+        {% comment %}Блог - "Топ Новости"{% endcomment %}
+        <div class="sidebar-widget-area">
+            <h5 class="title">Топ Новости</h5>
+            <div class="widget-content">
+                {% for new in top_news|slice:":5" %}
+                    <div class="single-blog-post post-style-2 d-flex align-items-center widget-post">
+
+                        <div class="post-thumbnail">
+                            {% if new.header_image %}
+                                <img src="{{ new.header_image.url }}" style="height:80px;" alt="">
+                            {% else %}
+                                <br/><br/>
+                            {% endif %}
+                        </div>
+
+                        <div class="post-content">
+                            <a href="{% url 'news-detail' new.id %}" class="headline">
+                                <h5 class="mb-0">{{ new.title|title }}</h5>
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div>
+        </div>
+
+        {% comment %}Блог - "Свяжитесь С Нами"{% endcomment %}
+        <div class="sidebar-widget-area">
+            <h5 class="title">Свяжитесь С Нами</h5>
+            <div class="widget-content">
+                <div class="social-area d-flex justify-content-between">
+                    <a href="https://www.facebook.com/"><i class="fa fa-facebook"></i></a>
+                    <a href="https://twitter.com/"><i class="fa fa-twitter"></i></a>
+                    <a href="http://pinterest.com/"><i class="fa fa-pinterest"></i></a>
+                    <a href="https://vimeo.com/"><i class="fa fa-vimeo"></i></a>
+                    <a href="https://www.instagram.com/"><i class="fa fa-instagram"></i></a>
+                    <a href="https://www.google.com/"><i class="fa fa-google"></i></a>
+                </div>
+            </div>
+        </div>
+
+        {% comment %}Блог - "Сегодняшний Выбор1"{% endcomment %}
+        <div class="sidebar-widget-area">
+            <h5 class="title">Сегодняшний Выбор</h5>
+            <div class="widget-content">
+
+                <div class="single-blog-post todays-pick">
+                    {% for new in today_pick|slice:":1" %}
+
+                        <div class="post-thumbnail">
+                            {% if new.header_image %}
+                                <img src="{{ new.header_image.url }}" style="height:200px;" alt="">
+                            {% else %}
+                                <br/><br/>
+                            {% endif %}
+                        </div>
+
+                        <div class="post-content px-0 pb-0">
+                            <a href="{% url 'news-detail' new.id %}" class="headline">
+                                <h5>{{ new.title }}</h5>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,70 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}Регистрация{% endblock title %}
+{% block content %}
+    {% comment %}Блог - "Шапка"{% endcomment %}
+    <div class="hero-area height-100 bg-img background-overlay" style="background-image: url({% static 'main/img/bg2.jpg' %});">
+    </div>
+    {% if not user.is_authenticated %}
+        <section class="ftco-section">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6 text-center mb-5">
+                        <h2 class="heading-section">Регистрация</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="wrap p-5">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <p>
+                                    <label class="username">Логин:</label>
+                                    {{ form.username }}
+                                </p>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <p>
+                                    <label class="email">Почта:</label>
+                                    {{ form.email }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                              <p>
+                                  <label class="first_name">Имя:</label>
+                                  {{ form.first_name }}
+                              </p>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <p>
+                                    <label class="last_name">Фамилия:</label>
+                                    {{ form.last_name }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <p>
+                                <label class="password1">Пароль:</label>
+                                {{ form.password1 }}
+                            </p>
+                            <ul><li>Пароль не должен быть слишком похож на другую вашу личную информацию.</li><li>Ваш пароль должен содержать как минимум 8 символов.</li><li>Такой пароль часто используется.</li><li>Пароль не может состоять только из цифр.</li></ul>
+                            <p></p>
+                            <p>
+                                <label class="password2">Подтверждение пароля:</label>
+                                {{ form.password2 }}
+                                <span class="helptext">Для подтверждения введите, пожалуйста, пароль ещё раз.</span>
+                            </p>
+                        </div>
+                        <div class="col text-center">
+                            <button class="btn world-btn" type="submit" style="color: #ffffff; border-color: #0000ff; background-color: #0000ff;">Регистрация</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+{% endblock content %}
