@@ -77,7 +77,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'blog.wsgi.application'
+WSGI_APPLICATION = 'blog.blog.wsgi.application'
 
 
 # Database
@@ -153,6 +153,8 @@ STATICFILES_DIRS = [
 ]
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# whitenoise.django.GzipManifestStaticFilesStorage
+# django.contrib.staticfiles.storage.ManifestStaticFilesStorage
 
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
